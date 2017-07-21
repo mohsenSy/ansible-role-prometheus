@@ -1,0 +1,7 @@
+---
+# defaults file for prometheus
+PROMETHEUS_VERSION: 1.7.1
+PROMETHEUS_BIND_PORT: 9090
+PROMETHEUS_JOBS:
+  - prometheus:
+    - "localhost:{{ PROM_BIND_PORT }}"

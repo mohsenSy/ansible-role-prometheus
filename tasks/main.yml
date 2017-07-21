@@ -1,0 +1,39 @@
+---
+# tasks file for prometheus
+- name: Include OS specific variables
+  include_vars: "{{ansible_distribution}}.{{ ansible_distribution_version }}.yml"
+- name: Create dir for downloaded files and prometheus
+  file:
+    name: "/opt/{{item}}"
+    state: directory
+  with_items:
+    - archives
+    - Prometheus
+- name: Download Prometheus tar file
+  get_url:
+    url: "https://github.com/prometheus/prometheus/releases/download/v{{PROMETHEUS_VERSION}}/prometheus-{{PROMETHEUS_VERSION}}.linux-amd64.tar.gz"
+    dest: /opt/archives
+- name: untar the file
+  unarchive:
+    dest: /opt/Prometheus
+    remote_src: True
+    src: "/opt/archives/prometheus-{{PROMETHEUS_VERSION}}.linux-amd64.tar.gz"
+    exclude: "prometheus.yml"
+- name: create prometheus service file
+  template:
+    src: "{{ PROM_CONF_SRC }}"
+    dest: "{{ PROM_CONF_DEST }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart prometheus
+- name: Update prometheus config file
+  template:
+    src: prometheus.yml.j2
+    dest: "/opt/Prometheus/prometheus-{{PROMETHEUS_VERSION}}.linux-amd64/prometheus.yml"
+  notify: restart prometheus
+- name: Start service
+  service:
+    name: prometheus
+    state: started
+    enabled: true

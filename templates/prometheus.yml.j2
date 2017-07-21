@@ -1,0 +1,13 @@
+{% macro job_define(name,targets) %}
+  - job_name: {{ name }}
+          static_configs:
+          - targets: [{% for target in targets %} '{{ target }}',{% endfor %}]
+{% endmacro %}
+global:
+  scrape_interval: 5s
+scrape_configs:
+  {% for jobs in PROMETHEUS_JOBS %}
+    {% for job,targets in jobs.items() -%}
+      {{ job_define(job,targets) }}
+    {%- endfor %}
+  {% endfor %}
