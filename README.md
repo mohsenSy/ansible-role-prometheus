@@ -14,13 +14,16 @@ Role Variables
 
 This role uses three variables all of them has default values, these variables are:
 
-* PROMETHEUS_VERSION: The version of prometheus to install default is **1.7.1**
-* PROMETHEUS_BIND_PORT: The port used to bind prometheus to it default is **9090**
-* PROMETHEUS_JOBS: This variable is an array, it defines the jobs used by prometheus and their respective instances
+* **PROMETHEUS_VERSION**: The version of prometheus to install default is **1.7.1**
+* **PROMETHEUS_BIND_PORT**: The port used to bind prometheus to it default is **9090**
+* **PROMETHEUS_JOBS**: This variable is an array, it defines the jobs used by prometheus and their respective instances
   default value is:
+    ```
     - prometheus:
       - "localhost:{{ PROM_BIND_PORT }}"
+    ```
   This means that prometheus will only monitor it self, to add more jobs and instances use this syntax:
+    ```
     - prometheus:
       - "prom_server:{{ PROM_BIND_PORT }}"
     - node:
@@ -29,7 +32,9 @@ This role uses three variables all of them has default values, these variables a
     - mysql:
       - "dbserver1:9104"
       - "dbserver2:9104"
+    ```
     Adding new jobs and instances is super easy just add them to prom_jobs and run the role again
+
     For more information about prometheus jobs and instances visit [this page](https://prometheus.io/docs/concepts/jobs_instances/)
 
 Dependencies
@@ -68,7 +73,10 @@ BSD
 Author Information
 ------------------
 
-You can contact me on:
-(twitter)[https://twitter.com/mouhsen_ibrahim]
-(linkedin)[https://linkedin.com/in/mohsen-ibrahim-670b13112/]
+If you have any question please contact me on
+
+[twitter](https://twitter.com/mouhsen_ibrahim)
+
+[linkedin](https://linkedin.com/in/mohsen-ibrahim-670b13112/)
+
 email mohsen47@hotmail.co.uk
