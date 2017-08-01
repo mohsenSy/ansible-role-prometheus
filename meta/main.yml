@@ -34,8 +34,7 @@ galaxy_info:
   platforms:
    - name: Ubuntu
      versions:
-     - trusty
-     - xenial
+     - all
   # - name: SomePlatform
   #   versions:
   #   - all

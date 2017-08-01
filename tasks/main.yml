@@ -1,7 +1,11 @@
 ---
 # tasks file for prometheus
-- name: Include OS specific variables
-  include_vars: "{{ansible_distribution}}.{{ ansible_distribution_version }}.yml"
+- name: Include Ubuntu variable files for version 14.04 and before
+  include_vars: "{{ansible_distribution}}.upstart.yml"
+  when: ansible_distribution == "Ubuntu" and ansible_distribution_version|float <= 14.04"
+- name: Include Ubuntu variable files for version 14.10 and after
+  include_vars: "{{ansible_distribution}}.systemd.yml"
+  when: ansible_distribution == "Ubuntu" and ansible_distribution_version|float > 14.04
 - name: Create dir for downloaded files and prometheus
   file:
     name: "/opt/{{item}}"
