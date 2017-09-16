@@ -43,7 +43,7 @@ script:
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)
   # install curl if not installed
-  - docker exec -e TERM=xterm -e PKG=${PKG} --tty "$(cat ${container_id})" bash -c 'which curl | ($PKG update && $PKG install curl -y)'
+  - docker exec -e TERM=xterm -e PKG=${PKG} --tty "$(cat ${container_id})" bash -c 'which curl || ($PKG update && $PKG install curl -y)'
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm curl http://localhost:9090'
 
 notifications:
