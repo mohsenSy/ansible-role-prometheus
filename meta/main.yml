@@ -35,16 +35,16 @@ galaxy_info:
    - name: Ubuntu
      versions:
      - all
-  - name: Debian
-    versions:
-      - 8
-  - name: Centos
-    versions:
-      - 6
-      - 7
-  - name: fedora
-    versions:
-      - 24
+   - name: Debian
+     versions:
+     - 8
+   - name: Centos
+     versions:
+     - 6
+     - 7
+   - name: fedora
+     versions:
+     - 24
   # - name: SomePlatform
   #   versions:
   #   - all
