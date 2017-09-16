@@ -1,3 +1,0 @@
----
-  PROM_CONF_SRC: prometheus.Ubuntu.upstart.conf.j2
-  PROM_CONF_DEST: /etc/init/prometheus.conf
