@@ -2,7 +2,10 @@
 # tasks file for prometheus
 - name: Include Ubuntu variable files for version 14.04 and before
   include_vars: "upstart.yml"
-  when: (ansible_distribution == "Ubuntu" and ansible_distribution_version|float <= 14.04) or ( ansible_distribution == "CentOS" and ansible_distribution_version.split('.')[0]|float == 6)
+  when: (ansible_distribution == "Ubuntu" and ansible_distribution_version|float <= 14.04)
+- name: Include variables for CentOS6
+  include_vars: "centos6.upstart.yml"
+  when: ansible_distribution == "CentOS" and ansible_distribution_version.split('.')[0]|float == 6
 - name: Include Ubuntu variable files for version 14.10 and after
   include_vars: "systemd.yml"
   when: (ansible_distribution == "Ubuntu" and ansible_distribution_version|float > 14.04) or (ansible_distribution == "Fedora" and ansible_distribution_version|float == 24) or (ansible_distribution == "CentOS" and ansible_distribution_version.split('.')[0]|float == 7) or (ansible_distribution == "Debian" and ansible_distribution_version.split('.')[0]|float == 8)
@@ -36,6 +39,12 @@
     src: prometheus.yml.j2
     dest: "/opt/Prometheus/prometheus-{{PROMETHEUS_VERSION}}.linux-amd64/prometheus.yml"
   notify: restart prometheus
+- name: Create a symlink for the service when running on CentOS6
+  file:
+    src: "{{ PROM_CONF_DEST }}/prometheus.conf"
+    dest: /etc/init.d/prometheus
+    mode: 0755
+  when: ansible_distribution == "CentOS" and ansible_distribution_version.split('.')[0]|float == 6
 - name: Start service
   service:
     name: prometheus
