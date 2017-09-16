@@ -3,12 +3,12 @@ services:
   - docker
 language: python
 env:
-  - distro=centos7 init=/usr/lib/systemd/systemd run_opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-  - distro=centos6 init=/sbin/init run_opts=""
-  - distro=fedora24 init=/usr/lib/systemd/systemd run_opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-  - distro=ubuntu1604 init=/lib/systemd/systemd run_opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-  - distro=ubuntu1404 init=/sbin/init run_opts=""
-  - distro=debian8 init=/lib/systemd/systemd run_opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+  - distro=centos7 init=/usr/lib/systemd/systemd run_opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro" PKG=yum
+  - distro=centos6 init=/sbin/init run_opts="" PKG=yum
+  - distro=fedora24 init=/usr/lib/systemd/systemd run_opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro" PKG=yum
+  - distro=ubuntu1604 init=/lib/systemd/systemd run_opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro" PKG=apt-get
+  - distro=ubuntu1404 init=/sbin/init run_opts="" PKG=apt-get
+  - distro=debian8 init=/lib/systemd/systemd run_opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro" PKG=apt-get
 
 before_install:
   # Pull the image from Docker Hub for the OS under test.
