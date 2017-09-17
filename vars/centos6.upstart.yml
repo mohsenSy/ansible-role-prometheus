@@ -1,3 +1,3 @@
 ---
   PROM_CONF_SRC: prometheus.centos6.upstart.conf.j2
-  PROM_CONF_DEST: /etc/init/prometheus.conf
+  PROM_CONF_DEST: /etc/init.d/prometheus

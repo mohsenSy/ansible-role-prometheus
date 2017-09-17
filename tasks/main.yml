@@ -32,19 +32,13 @@
     dest: "{{ PROM_CONF_DEST }}"
     owner: root
     group: root
-    mode: 0644
+    mode: 0755
   notify: restart prometheus
 - name: Update prometheus config file
   template:
     src: prometheus.yml.j2
     dest: "/opt/Prometheus/prometheus-{{PROMETHEUS_VERSION}}.linux-amd64/prometheus.yml"
   notify: restart prometheus
-- name: Create a symlink for the service when running on CentOS6
-  file:
-    src: "{{ PROM_CONF_DEST }}/prometheus.conf"
-    dest: /etc/init.d/prometheus
-    mode: 0755
-  when: ansible_distribution == "CentOS" and ansible_distribution_version.split('.')[0]|float == 6
 - name: Start service
   service:
     name: prometheus

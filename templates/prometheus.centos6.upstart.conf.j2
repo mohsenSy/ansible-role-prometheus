@@ -1,12 +1,62 @@
-# Run prometheus
+#!/bin/bash
+#
+#       /etc/rc.d/init.d/prometheus
+#
+#       Prometheus is a monitoring solution which uses time series database to store data
+#
+# chkconfig: 5 90 60
 
-start on startup
-#console log
+# Source function library.
+. /etc/init.d/functions
 
-script
-   "/opt/Prometheus/prometheus-1.7.1.linux-amd64/prometheus" "--config.file" "/opt/Prometheus/prometheus-1.7.1.linux-amd64/prometheus.yml" "--web.listen-address=0.0.0.0:{{ PROMETHEUS_BIND_PORT }}"
-end script
+RETVAL=0
+prog="prometheus"
+LOCKFILE=/var/lock/subsys/$prog
+LOGFILE=/var/log/$prog.log
 
-post-stop script
-  sleep 1
-end script
+prometheus_dir=/opt/Prometheus/prometheus-{{PROMETHEUS_VERSION}}.linux-amd64/
+
+start() {
+        status && exit 0
+        echo -n "Starting $prog: "
+        nohup $prometheus_dir/$prog --config.file $prometheus_dir/prometheus.yml --web.listen-address=0.0.0.0:{{ PROMETHEUS_BIND_PORT }} >$LOGFILE &
+        RETVAL=$?
+        [ $RETVAL -eq 0 ] && touch $LOCKFILE
+        echo
+        return $RETVAL
+}
+
+stop() {
+        echo -n "Shutting down $prog: "
+        pkill $prog && success || failure
+        RETVAL=$?
+        [ $RETVAL -eq 0 ] && rm -f $LOCKFILE
+        echo
+        return $RETVAL
+}
+
+status() {
+   echo -n "Checking $prog status: "
+   curl http://localhost:{{ PROMETHEUS_BIND_PORT }} 2> /dev/null && (RETVAL=$? && echo $prog is running && return $RETVAL) || (RETVAL=$? && echo $prog is not running && return $RETVAL)
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    status)
+        status
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    *)
+        echo "Usage: <servicename> {start|stop|status|restart]"
+        exit 1
+        ;;
+esac
+exit $RETVAL
