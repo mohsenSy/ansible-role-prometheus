@@ -12,7 +12,7 @@ env:
 
 matrix:
   allow_failures:
-    - env: distro=centos6
+    - env: distro=centos6 init=/sbin/init run_opts="" PKG=yum
 
 before_install:
   # Pull the image from Docker Hub for the OS under test.
