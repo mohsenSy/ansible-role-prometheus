@@ -1,8 +1,9 @@
+[![Build Status](https://travis-ci.org/mohsenSy/ansible-role-prometheus.svg?branch=master)](https://travis-ci.org/mohsenSy/ansible-role-prometheus)
 Prometheus
 =========
 
 This role can be used to install prometheus monitoring solution and configure it easily using variables.
-Currently only Ubuntu 14.04 and 16.04 are supported more will be added soon.
+It supports all ubuntu versions, debian 8, centos 6, centos 7 and fedora 14.
 
 Requirements
 ------------
