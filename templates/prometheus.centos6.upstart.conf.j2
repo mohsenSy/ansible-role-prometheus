@@ -28,10 +28,8 @@ start() {
 
 stop() {
         echo -n "Shutting down $prog: "
-        pkill $prog && success || failure
+        pkill $prog && rm -rf $LOCKFILE
         RETVAL=$?
-        [ $RETVAL -eq 0 ] && rm -f $LOCKFILE
-        echo
         return $RETVAL
 }
 

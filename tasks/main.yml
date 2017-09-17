@@ -20,6 +20,12 @@
   get_url:
     url: "https://github.com/prometheus/prometheus/releases/download/v{{PROMETHEUS_VERSION}}/prometheus-{{PROMETHEUS_VERSION}}.linux-amd64.tar.gz"
     dest: /opt/archives
+- name: Install tar on fedora
+  yum:
+    name: tar
+    update_cache: true
+    state: present
+  when: ansible_distribution == "Fedora" and ansible_distribution_version|float == 24
 - name: untar the file
   unarchive:
     dest: /opt/Prometheus
