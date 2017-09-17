@@ -10,6 +10,10 @@ env:
   - distro=ubuntu1404 init=/sbin/init run_opts="" PKG=apt-get
   - distro=debian8 init=/lib/systemd/systemd run_opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro" PKG=apt-get
 
+matrix:
+  allow_failures:
+    - env: distro=centos6
+
 before_install:
   # Pull the image from Docker Hub for the OS under test.
   - 'docker pull geerlingguy/docker-${distro}-ansible:latest'
