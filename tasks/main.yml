@@ -23,7 +23,6 @@
 - name: Install tar on fedora
   dnf:
     name: tar
-    update_cache: true
     state: present
   when: ansible_distribution == "Fedora" and ansible_distribution_version|float == 24
 - name: untar the file
