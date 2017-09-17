@@ -37,12 +37,8 @@ galaxy_info:
      - all
    - name: Debian
      versions:
-     - 8
-   - name: Centos
-     versions:
-     - 6
-     - 7
-   - name: fedora
+     - jessie
+   - name: Fedora
      versions:
      - 24
   # - name: SomePlatform
