@@ -1,3 +1,3 @@
 ---
-  PROM_CONF_SRC: prometheus.Ubuntu.systemd.conf.j2
+  PROM_CONF_SRC: prometheus.systemd.conf.j2
   PROM_CONF_DEST: /lib/systemd/system/prometheus.service

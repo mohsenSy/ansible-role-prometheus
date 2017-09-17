@@ -1,11 +1,14 @@
 ---
 # tasks file for prometheus
-- name: Include Ubuntu variable files for version 14.04 and before
-  include_vars: "{{ansible_distribution}}.upstart.yml"
-  when: ansible_distribution == "Ubuntu" and ansible_distribution_version|float <= 14.04"
-- name: Include Ubuntu variable files for version 14.10 and after
-  include_vars: "{{ansible_distribution}}.systemd.yml"
-  when: ansible_distribution == "Ubuntu" and ansible_distribution_version|float > 14.04
+- name: Include variable file for systems using upstart init system
+  include_vars: "upstart.yml"
+  when: (ansible_distribution == "Ubuntu" and ansible_distribution_version|float <= 14.04)
+- name: Include variable file for CentOS6
+  include_vars: "centos6.upstart.yml"
+  when: ansible_distribution == "CentOS" and ansible_distribution_version.split('.')[0]|float == 6
+- name: Include variable file for systems using systemd init system
+  include_vars: "systemd.yml"
+  when: (ansible_distribution == "Ubuntu" and ansible_distribution_version|float > 14.04) or (ansible_distribution == "Fedora" and ansible_distribution_version|float == 24) or (ansible_distribution == "CentOS" and ansible_distribution_version.split('.')[0]|float == 7) or (ansible_distribution == "Debian" and ansible_distribution_version.split('.')[0]|float == 8)
 - name: Create dir for downloaded files and prometheus
   file:
     name: "/opt/{{item}}"
@@ -17,19 +20,25 @@
   get_url:
     url: "https://github.com/prometheus/prometheus/releases/download/v{{PROMETHEUS_VERSION}}/prometheus-{{PROMETHEUS_VERSION}}.linux-amd64.tar.gz"
     dest: /opt/archives
+- name: Install tar on fedora
+  dnf:
+    name: tar
+    state: present
+  when: ansible_distribution == "Fedora" and ansible_distribution_version|float == 24
 - name: untar the file
   unarchive:
     dest: /opt/Prometheus
     remote_src: True
     src: "/opt/archives/prometheus-{{PROMETHEUS_VERSION}}.linux-amd64.tar.gz"
     exclude: "prometheus.yml"
+  notify: restart prometheus
 - name: create prometheus service file
   template:
     src: "{{ PROM_CONF_SRC }}"
     dest: "{{ PROM_CONF_DEST }}"
     owner: root
     group: root
-    mode: 0644
+    mode: 0755
   notify: restart prometheus
 - name: Update prometheus config file
   template:

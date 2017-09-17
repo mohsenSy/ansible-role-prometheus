@@ -20,12 +20,12 @@ This role uses three variables all of them has default values, these variables a
   default value is:
     ```
     - prometheus:
-      - "localhost:{{ PROM_BIND_PORT }}"
+      - "localhost:{{ PROMETHEUS_BIND_PORT }}"
     ```
   This means that prometheus will only monitor it self, to add more jobs and instances use this syntax:
     ```
     - prometheus:
-      - "prom_server:{{ PROM_BIND_PORT }}"
+      - "prom_server:{{ PROMETHEUS_BIND_PORT }}"
     - node:
       - "server1:9100"
       - "server2:9100"
@@ -49,10 +49,10 @@ Example Playbook
     - hosts: prom_server
       vars:
         - PROM_VERSION: 1.7.1
-        - PROM_BIND_PORT: 9091
+        - PROMETHEUS_BIND_PORT: 9091
         - prom_jobs:
           prometheus:
-            - "prom_server:{{ PROM_BIND_PORT }}"
+            - "prom_server:{{ PROMETHEUS_BIND_PORT }}"
           node:
             - "server1:9100"
             - "server2:9100"
