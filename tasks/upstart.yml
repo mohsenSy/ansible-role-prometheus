@@ -13,7 +13,8 @@
 - name: Create prometheus upstart file
   template:
     src: prometheus.upstart.j2
-    dest: /etc/init.d/prometheus
+    dest: /etc/init/prometheus.conf
+    mode: 0644
 - name: Start prometheus
   service:
     name: prometheus
