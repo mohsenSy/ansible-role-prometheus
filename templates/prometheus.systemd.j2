@@ -1,0 +1,5 @@
+[Service]
+ExecStart={{ prometheus_dir }}/prometheus-{{ prometheus_version }}.linux-amd64/prometheus --config.file={{ prometheus_dir }}/prometheus-{{ prometheus_version }}.linux-amd64/prometheus.yml
+
+[Install]
+WantedBy=multi-user.target

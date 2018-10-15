@@ -1,13 +1,33 @@
-{% macro job_define(name,targets) %}
-  - job_name: {{ name }}
-          static_configs:
-          - targets: [{% for target in targets %} '{{ target }}',{% endfor %}]
-{% endmacro %}
+#jinja2:lstrip_blocks: True
+# my global config
 global:
-  scrape_interval: 5s
+  scrape_interval:     {{ prometheus_scrape_interval }} # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: {{ prometheus_evaluation_interval }} # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+{% if prometheus_alert_manager is defined %}
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      # - alertmanager:9093
+{% endif %}
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
 scrape_configs:
-  {% for jobs in PROMETHEUS_JOBS %}
-    {% for job,targets in jobs.items() -%}
-      {{ job_define(job,targets) }}
-    {%- endfor %}
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  {% for job in prometheus_jobs %}
+  - job_name: '{{ job.name }}'
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+    - targets: [{% for target in job.targets %} '{{ target }}',{% endfor %}]
   {% endfor %}

@@ -1,0 +1,21 @@
+- name: unarchive prometheus
+  unarchive:
+    src: "{{ archives_dir }}/prometheus-{{ prometheus_version }}.linux-amd64.tar.gz"
+    dest: "{{ prometheus_dir }}"
+    exclude: prometheus.yml
+    remote_src: true
+  notify: restart prometheus upstart
+- name: Copy prometheus configuration file
+  template:
+    src: prometheus.yml.j2
+    dest: "{{ prometheus_dir }}/prometheus-{{ prometheus_version }}.linux-amd64/prometheus.yml"
+  notify: restart prometheus upstart
+- name: Create prometheus upstart file
+  template:
+    src: prometheus.upstart.j2
+    dest: /etc/init.d/prometheus
+- name: Start prometheus
+  service:
+    name: prometheus
+    state: started
+    enabled: true

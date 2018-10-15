@@ -1,7 +1,9 @@
 ---
 # defaults file for prometheus
-PROMETHEUS_VERSION: 1.7.1
-PROMETHEUS_BIND_PORT: 9090
-PROMETHEUS_JOBS:
-  - prometheus:
-    - "localhost:{{ PROMETHEUS_BIND_PORT }}"
+  prometheus_version: 2.4.2
+  prometheus_scrape_interval: 15s
+  prometheus_evaluation_interval: 15s
+  prometheus_jobs:
+    - name: prometheus
+      targets:
+        - localhost:9090

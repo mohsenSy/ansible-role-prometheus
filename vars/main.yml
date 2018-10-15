@@ -1,2 +1,4 @@
 ---
 # vars file for prometheus
+ archives_dir: /opt/archives
+ prometheus_dir: /opt/prometheus
