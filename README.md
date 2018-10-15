@@ -3,7 +3,7 @@ Prometheus
 =========
 
 This role can be used to install prometheus monitoring solution and configure it easily using variables.
-It supports all ubuntu versions, debian 8, centos 6, centos 7 and fedora 14.
+It supports all ubuntu versions, debian 8 and centos 7.
 
 Requirements
 ------------
@@ -15,26 +15,28 @@ Role Variables
 
 This role uses three variables all of them has default values, these variables are:
 
-* **PROMETHEUS_VERSION**: The version of prometheus to install default is **1.7.1**
-* **PROMETHEUS_BIND_PORT**: The port used to bind prometheus to it default is **9090**
-* **PROMETHEUS_JOBS**: This variable is an array, it defines the jobs used by prometheus and their respective instances
+* **prometheus_version**: The version of prometheus to install default is **2.4.2**
+* **prometheus_scrape_interval**: The interval at which targets are scarped default is 15s
+* **prometheus_evaluation_interval**: The interval at which rules are evaluated default is 15s
+* **prometheus_jobs**: This variable is an array, it defines the jobs used by prometheus and their respective instances
   default value is:
     ```
-    - prometheus:
-      - "localhost:{{ PROMETHEUS_BIND_PORT }}"
+    - name: prometheus
+      targets:
+        - localhost:9090
     ```
   This means that prometheus will only monitor it self, to add more jobs and instances use this syntax:
     ```
-    - prometheus:
-      - "prom_server:{{ PROMETHEUS_BIND_PORT }}"
-    - node:
-      - "server1:9100"
-      - "server2:9100"
-    - mysql:
-      - "dbserver1:9104"
-      - "dbserver2:9104"
+    - name: node
+      targets:
+        - "server1:9100"
+        - "server2:9100"
+    - name: mysql
+      targets:
+        - "dbserver1:9104"
+        - "dbserver2:9104"
     ```
-    Adding new jobs and instances is super easy just add them to prom_jobs and run the role again
+    Adding new jobs and instances is super easy just add them to prometheus_jobs and run the role again
 
     For more information about prometheus jobs and instances visit [this page](https://prometheus.io/docs/concepts/jobs_instances/)
 
@@ -49,20 +51,22 @@ Example Playbook
 
     - hosts: prom_server
       vars:
-        - PROM_VERSION: 1.7.1
-        - PROMETHEUS_BIND_PORT: 9091
-        - prom_jobs:
-          prometheus:
-            - "prom_server:{{ PROMETHEUS_BIND_PORT }}"
-          node:
-            - "server1:9100"
-            - "server2:9100"
-            - "server3:9100"
-          mysql:
-            - "db1:9104"
-            - "db2:9104"
-            - "db3:9104"
-            - "db4:9104"
+        - prometheus_version: 2.4.2
+        - prometheus_jobs:
+          - name: prometheus
+            targets:
+              - "prom_server:9090"
+          - name: node
+            targets:
+              - "server1:9100"
+              - "server2:9100"
+              - "server3:9100"
+          - name: mysql
+            targets:
+              - "db1:9104"
+              - "db2:9104"
+              - "db3:9104"
+              - "db4:9104"
       roles:
          - mohsenSy.prometheus
 
